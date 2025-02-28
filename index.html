@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-step Form - Frontend Mentor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --marine-blue: hsl(213, 96%, 18%);
+      --purplish-blue: hsl(243, 100%, 62%);
+      --pastel-blue: hsl(228, 100%, 84%);
+      --light-blue: hsl(206, 94%, 87%);
+      --strawberry-red: hsl(354, 84%, 57%);
+      --cool-gray: hsl(231, 11%, 63%);
+      --light-gray: hsl(229, 24%, 87%);
+      --magnolia: hsl(217, 100%, 97%);
+      --alabaster: hsl(231, 100%, 99%);
+      --white: hsl(0, 0%, 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Ubuntu', sans-serif;
+      background-color: var(--magnolia);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      width: 940px;
+      min-height: 600px;
+      padding: 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .sidebar {
+      background: url('assets/images/bg-sidebar-desktop.svg') no-repeat center/cover;
+      border-radius: 10px;
+      padding: 2rem;
+      width: 274px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--white);
+    }
+
+    .step-number {
+      width: 33px;
+      height: 33px;
+      border: 1px solid var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    .step-number.active {
+      background: var(--light-blue);
+      border-color: var(--light-blue);
+      color: var(--marine-blue);
+    }
+
+    .step-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .step-info span {
+      font-size: 0.875rem;
+      color: var(--pastel-blue);
+    }
+
+    .step-info strong {
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    .form-steps {
+      flex: 1;
+      padding: 2rem 4rem;
+      position: relative;
+    }
+
+    .form-step {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+    }
+
+    .form-step.active {
+      display: flex;
+    }
+
+    .form-step h1 {
+      color: var(--marine-blue);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-step p {
+      color: var(--cool-gray);
+      margin-bottom: 2rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      color: var(--marine-blue);
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--marine-blue);
+    }
+
+    input.invalid {
+      border-color: var(--strawberry-red);
+    }
+
+    .error-message {
+      color: var(--strawberry-red);
+      font-size: 0.75rem;
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: none;
+    }
+
+    .button-group {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-next {
+      background: var(--marine-blue);
+      color: var(--white);
+    }
+
+    .btn-confirm {
+      background: var(--purplish-blue);
+    }
+
+    .btn-back {
+      background: none;
+      color: var(--cool-gray);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        width: 100%;
+        padding: 0;
+      }
+
+      .sidebar {
+        border-radius: 0;
+        flex-direction: row;
+        justify-content: center;
+        height: 172px;
+      }
+
+      .form-steps {
+        padding: 2rem 1.5rem;
+        margin-top: -4rem;
+      }
+
+      .button-group {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="step">
+        <div class="step-number active">1</div>
+        <div class="step-info">
+          <span>Step 1</span>
+          <strong>Your Info</strong>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-info">
+          <span>Step 2</span>
+          <strong>Select Plan</strong>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-info">
+          <span>Step 3</span>
+          <strong>Add-Ons</strong>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-info">
+          <span>Step 4</span>
+          <strong>Summary</strong>
+        </div>
+      </div>
+    </aside>
+
+    <div class="form-steps">
+      <!-- Step 1: Personal Info -->
+      <form class="form-step active" data-step="1">
+        <h1>Personal Info</h1>
+        <p>Please provide your name, email address, and phone number.</p>
+
+        <div class="input-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" required>
+          <span class="error-message">This field is required</span>
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required>
+          <span class="error-message">Valid email required</span>
+        </div>
+
+        <div class="input-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" required>
+          <span class="error-message">Valid phone number required</span>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-next" onclick="validateStep1()">Next Step</button>
+        </div>
+      </form>
+
+      <!-- Step 2: Select Plan -->
+      <div class="form-step" data-step="2">
+        <h1>Select Your Plan</h1>
+        <p>You have the option of monthly or yearly billing.</p>
+
+        <div class="plan-options">
+          <div class="plan-card" onclick="selectPlan('arcade')">
+            <img src="assets/images/icon-arcade.svg" alt="Arcade">
+            <div class="plan-details">
+              <h3>Arcade</h3>
+              <p class="price">$9/mo</p>
+              <p class="yearly-discount">2 months free</p>
+            </div>
+          </div>
+          <!-- Add similar divs for other plans -->
+        </div>
+
+        <div class="billing-toggle">
+          <span>Monthly</span>
+          <label class="switch">
+            <input type="checkbox" id="billing-toggle">
+            <span class="slider"></span>
+          </label>
+          <span>Yearly</span>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-back" onclick="prevStep()">Go Back</button>
+          <button type="button" class="btn btn-next" onclick="validatePlan()">Next Step</button>
+        </div>
+      </div>
+
+      <!-- Add other steps -->
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const formData = {
+      personalInfo: {},
+      plan: null,
+      addOns: []
+    };
+
+    function validateStep1() {
+      let isValid = true;
+      const inputs = document.querySelectorAll('[data-step="1"] input');
+      
+      inputs.forEach(input => {
+        const error = input.nextElementSibling;
+        if (!input.checkValidity()) {
+          input.classList.add('invalid');
+          error.style.display = 'block';
+          isValid = false;
+        } else {
+          input.classList.remove('invalid');
+          error.style.display = 'none';
+          formData.personalInfo[input.id] = input.value;
+        }
+      });
+
+      if (isValid) nextStep(2);
+    }
+
+    function nextStep(step) {
+      if (currentStep >= 4) return;
+      document.querySelector(`[data-step="${currentStep}"]`).classList.remove('active');
+      currentStep = step;
+      document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+      updateProgress();
+    }
+
+    function prevStep() {
+      if (currentStep <= 1) return;
+      document.querySelector(`[data-step="${currentStep}"]`).classList.remove('active');
+      currentStep--;
+      document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      document.querySelectorAll('.step-number').forEach((num, index) => {
+        num.classList.toggle('active', index < currentStep);
+      });
+    }
+
+    // Initialize form
+    updateProgress();
+  </script>
+</body>
+</html>
